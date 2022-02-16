@@ -6,7 +6,7 @@ import { RootStackNavProps } from '../navigation';
 export const Lobby = ({ navigation }: RootStackNavProps<'Lobby'>) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>hello Lobby</Text>
+      <Text style={styles.text}>hello game Lobby</Text>
       <Button title="Go To Game" onPress={() => navigation.navigate('Game')} />
     </View>
   );
