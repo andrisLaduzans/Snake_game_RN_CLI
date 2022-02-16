@@ -15,6 +15,8 @@ export const Cell = ({ size, type }: Props) => {
       return theme.palette.red[3];
     } else if (type === 'snake') {
       return theme.palette.green[2];
+    } else if (type === 'head') {
+      return theme.palette.green[4];
     }
     return theme.palette.gray[2];
   }, [type]);

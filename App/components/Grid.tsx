@@ -16,7 +16,7 @@ export const Grid = ({ matrix }: Props) => {
   return (
     <View style={styles.container}>
       {matrix.map(row => (
-        <View>
+        <View key={`row-${row[0].id}`}>
           {row.map(cell => (
             <Cell
               key={cell.id}
