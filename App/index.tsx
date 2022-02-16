@@ -6,20 +6,15 @@ import {
   useColorScheme,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 import { Navigation } from '~navigation';
 
-const App = () => {
+export const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <SafeAreaView style={[backgroundStyle, styles.container]}>
+      <SafeAreaView style={[styles.container]}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <Navigation />
       </SafeAreaView>
@@ -32,5 +27,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default App;
