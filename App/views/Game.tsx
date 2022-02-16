@@ -16,8 +16,6 @@ const initialMatrix: { id: string; item: CellType }[][] = new Array(gridSize)
     })),
   );
 
-console.log('initialMatrix:', initialMatrix);
-
 export const Game = () => {
   return (
     <View>
