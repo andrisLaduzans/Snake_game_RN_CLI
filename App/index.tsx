@@ -5,10 +5,10 @@ import {
   StyleSheet,
   useColorScheme,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {Navigation} from './src/navigation';
+import { Navigation } from '~navigation';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';

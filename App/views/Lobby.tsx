@@ -1,8 +1,9 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import {RootStackNavProps} from '../navigation';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
-export const Lobby = ({navigation}: RootStackNavProps<'Lobby'>) => {
+import { RootStackNavProps } from '../navigation';
+
+export const Lobby = ({ navigation }: RootStackNavProps<'Lobby'>) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>hello Lobby</Text>

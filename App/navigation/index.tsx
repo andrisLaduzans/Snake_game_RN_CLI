@@ -1,10 +1,11 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import {Game, Lobby} from '../views';
+
+import { Game, Lobby } from '../views';
 
 type RootStackParamList = {
   Lobby: undefined;

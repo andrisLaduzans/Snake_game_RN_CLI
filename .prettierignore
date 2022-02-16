@@ -1,0 +1,12 @@
+.bundle
+android
+ios
+node_modules
+.buckconfig
+.gitignore
+.ruby-version
+.watchmanconfig
+Gemfile
+Gemfile.lock
+*.svg
+*.png
