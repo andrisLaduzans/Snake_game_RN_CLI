@@ -18,7 +18,13 @@
       "~navigation": ["./App/navigation"],
       "~navigation/*": ["./App/navigation/*"],
       "~views": ["./App/views"],
-      "~views/*": ["./App/views/*"]
+      "~views/*": ["./App/views/*"],
+      "~components": ["./App/components"],
+      "~components/*": ["./App/components/*"],
+      "~theme": ["./App/theme"],
+      "~theme/*": ["./App/theme/*"],
+      "~application": ["./App/application"],
+      "~application/*": ["./App/application/*"]
     }
   },
   "exclude": [
