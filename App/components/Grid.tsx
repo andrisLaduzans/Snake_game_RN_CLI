@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 
-import { CellType } from '~application/models/Cell';
+import { draw } from '~application/engine/draw';
+import { CellItem, Point } from '~application/models/Game';
 import { theme } from '~theme';
 
 import { Cell } from './Cell';
@@ -9,13 +10,23 @@ import { Cell } from './Cell';
 const { width } = Dimensions.get('window');
 
 interface Props {
-  matrix: { id: string; item: CellType }[][];
+  matrixSize: number;
+  snake: Point[];
+  apple: Point;
 }
 
-export const Grid = ({ matrix }: Props) => {
+export const Grid = ({ matrixSize, snake, apple }: Props) => {
+  const [display, setDisplay] = useState<CellItem[][]>(
+    draw(matrixSize, snake, apple),
+  );
+
+  useEffect(() => {
+    setDisplay(d => draw(d[0].length, snake, apple));
+  }, [apple, snake]);
+
   return (
     <View style={styles.container}>
-      {matrix.map(row => (
+      {display.map(row => (
         <View key={`row-${row[0].id}`}>
           {row.map(cell => (
             <Cell

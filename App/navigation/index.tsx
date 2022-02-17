@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Game">
         <Stack.Screen name="Lobby" component={Lobby} />
 
         <Stack.Screen name="Game" component={Game} />

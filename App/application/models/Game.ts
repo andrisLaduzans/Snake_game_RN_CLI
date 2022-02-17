@@ -12,3 +12,8 @@ export type CellItem = {
   coordinates: Point;
   item: CellType;
 };
+
+export type GameStatus = 'running' | 'paused';
+
+export const moveDirections = ['UP', 'DOWN', 'LEFT', 'RIGHT'] as const;
+export type MoveDirection = typeof moveDirections[number];

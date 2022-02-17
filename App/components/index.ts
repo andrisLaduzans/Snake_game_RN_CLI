@@ -1,3 +1,4 @@
 import { Grid } from './Grid';
+import { Controller } from './Controller';
 
-export { Grid };
+export { Grid, Controller };

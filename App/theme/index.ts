@@ -3,6 +3,11 @@ export const theme = {
   spacing: {},
 
   palette: {
+    text: {
+      onDark: '#eee',
+      onLight: '#333',
+    },
+
     black: {
       def: '#212121',
     },

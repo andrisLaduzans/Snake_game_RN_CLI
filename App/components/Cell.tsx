@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { CellType } from '~application/models/Cell';
+import { CellType } from '~application/models/Game';
 import { theme } from '~theme';
 
 interface Props {
