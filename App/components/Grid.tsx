@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 
-import { draw } from '~application/engine/draw';
 import { CellItem, Point } from '~application/models/Game';
 import { theme } from '~theme';
 
@@ -10,40 +9,66 @@ import { Cell } from './Cell';
 const { width } = Dimensions.get('window');
 
 interface Props {
-  matrixSize: number;
+  matrix: CellItem[][];
   snake: Point[];
   apple: Point;
 }
 
-export const Grid = ({ matrixSize, snake, apple }: Props) => {
-  const [display, setDisplay] = useState<CellItem[][]>(
-    draw(matrixSize, snake, apple),
-  );
-
-  useEffect(() => {
-    setDisplay(d => draw(d[0].length, snake, apple));
-  }, [apple, snake]);
+export const Grid = ({ matrix, snake, apple }: Props) => {
+  const size = useRef((width - theme.outerPadding * 2) / matrix[0].length);
 
   return (
     <View style={styles.container}>
-      {display.map(row => (
-        <View key={`row-${row[0].id}`}>
-          {row.map(cell => (
-            <Cell
-              key={cell.id}
-              size={(width - theme.outerPadding * 2) / row.length}
-              type={cell.item}
-            />
-          ))}
-        </View>
-      ))}
+      <View style={styles.gameBox}>
+        {matrix.map(row => (
+          <View key={`row-${row[0].id}`}>
+            {row.map(cell => (
+              <Cell key={cell.id} size={size.current} type={cell.item} />
+            ))}
+          </View>
+        ))}
+
+        <Cell
+          type="apple"
+          size={size.current}
+          style={[
+            styles.item,
+            {
+              left: size.current * apple.x,
+              top: size.current * apple.y,
+            },
+          ]}
+        />
+
+        {snake.map((snakeCell, index) => (
+          <Cell
+            key={`snake-${index}`}
+            type={index === 0 ? 'head' : 'snake'}
+            size={size.current}
+            style={[
+              styles.item,
+              {
+                left: size.current * snakeCell.x,
+                top: size.current * snakeCell.y,
+              },
+            ]}
+          />
+        ))}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     padding: theme.outerPadding,
+  },
+
+  gameBox: {
+    flexDirection: 'row',
+  },
+
+  item: {
+    position: 'absolute',
   },
 });

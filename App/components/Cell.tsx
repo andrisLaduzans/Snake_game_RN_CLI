@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { CellType } from '~application/models/Game';
 import { theme } from '~theme';
@@ -7,9 +7,10 @@ import { theme } from '~theme';
 interface Props {
   size: number;
   type: CellType;
+  style?: StyleProp<ViewStyle>;
 }
 
-export const Cell = ({ size, type }: Props) => {
+export const Cell = ({ size, type, style }: Props) => {
   const backgroundColor = useMemo(() => {
     if (type === 'apple') {
       return theme.palette.red[3];
@@ -23,7 +24,11 @@ export const Cell = ({ size, type }: Props) => {
 
   return (
     <View
-      style={[styles.container, { width: size, height: size, backgroundColor }]}
+      style={[
+        styles.container,
+        style,
+        { width: size, height: size, backgroundColor },
+      ]}
     />
   );
 };

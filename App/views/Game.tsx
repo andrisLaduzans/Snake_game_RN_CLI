@@ -1,11 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
+import {
+  initMatrix,
+  moveSnake,
+  spawnApple,
+  // useSetInterval,
+} from '~application/engine';
 import { GameStatus, MoveDirection, Point } from '~application/models/Game';
 import { theme } from '~theme';
 
-import { Controller, Grid } from '../components';
+import { Controller, DirectionIndicator, Grid } from '../components';
+
+// const initialGameSpeed = 900;
 
 const matrixSize = 19;
 
@@ -13,6 +21,8 @@ const initialHead: Point = {
   x: Math.floor(matrixSize / 2),
   y: Math.floor(matrixSize / 2),
 };
+
+const matrix = initMatrix(matrixSize);
 
 const initialSnake: Point[] = [
   initialHead,
@@ -26,72 +36,59 @@ const initialSnake: Point[] = [
   },
 ];
 
-export const moveSnake = (snake: Point[]) => {
-  const { x, y } = snake[0];
-  const newHead = { x, y: y - 1 };
-  snake.pop();
-  const newSnake = [newHead, ...snake];
-  return newSnake;
-};
-
 export const Game = () => {
   const [game, setGame] = useState<GameStatus>('paused');
 
-  const [ticks, setTicks] = useState(0);
   const [snake, setSnake] = useState<Point[]>(initialSnake);
 
-  const [apple] = useState<Point>({
-    x: Math.floor(Math.random() * matrixSize),
-    y: Math.floor(Math.random() * matrixSize),
-  });
+  const [apple, setApple] = useState<Point>(spawnApple(matrixSize));
 
-  const [, setDirection] = useState<MoveDirection>();
+  const [direction, setDirection] = useState<MoveDirection>();
 
-  const tick = useCallback(
-    (count: number) => {
-      if (game === 'paused') {
-        return;
-      }
+  const tick = () => {
+    if (!direction || game === 'paused') {
+      return;
+    }
 
-      setTicks(count + 1);
-      setSnake(s => moveSnake(s));
-    },
-    [game],
-  );
+    setSnake(s => moveSnake(s));
+  };
 
   const setPause = () => {
-    const newGame = game === 'paused' ? 'running' : 'paused';
-    setGame(newGame);
-
-    if (ticks === 0) {
-      setTicks(t => t + 1);
-      setSnake(s => moveSnake(s));
-    }
+    setGame(g => (g === 'paused' ? 'running' : 'paused'));
   };
 
   const handleSetDirection = (input: MoveDirection) => {
     setDirection(input);
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      tick(ticks);
-    }, 900);
+  const resetGame = () => {
+    setGame('paused');
+    setSnake(initialSnake);
+    setApple(spawnApple(matrixSize));
+    setDirection(undefined);
+  };
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [tick, ticks]);
+  // useSetInterval({ onTick: tick, duration: initialGameSpeed });
 
   return (
-    <Controller onTap={setPause} onFling={input => handleSetDirection(input)}>
+    <Controller
+      onDoubleTap={setPause}
+      onFling={input => handleSetDirection(input)}>
       <Animated.View style={styles.container} collapsable={false}>
         <View style={styles.section}>
-          <Text style={styles.heading}>{ticks}</Text>
           <Text style={styles.heading}>Game: {game}</Text>
         </View>
 
-        <Grid matrixSize={matrixSize} snake={snake} apple={apple} />
+        <Grid matrix={matrix} snake={snake} apple={apple} />
+
+        <View style={styles.directionIndicatorContainer}>
+          {direction ? <DirectionIndicator direction={direction} /> : null}
+        </View>
+
+        <View style={[styles.section, styles.debugButtonContainer]}>
+          <Button title="move" onPress={tick} />
+          <Button title="reset-game" onPress={resetGame} />
+        </View>
       </Animated.View>
     </Controller>
   );
@@ -111,5 +108,15 @@ const styles = StyleSheet.create({
     color: theme.palette.text.onDark,
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  directionIndicatorContainer: {
+    alignItems: 'center',
+    minHeight: 40,
+  },
+
+  debugButtonContainer: {
+    backgroundColor: 'skyblue',
+    marginTop: 40,
   },
 });

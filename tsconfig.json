@@ -24,7 +24,9 @@
       "~theme": ["./App/theme"],
       "~theme/*": ["./App/theme/*"],
       "~application": ["./App/application"],
-      "~application/*": ["./App/application/*"]
+      "~application/*": ["./App/application/*"],
+      "~assets":["./App/assets"],
+      "~assets/*":["./App/assets/*"],
     }
   },
   "exclude": [

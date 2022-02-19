@@ -1,4 +1,6 @@
-import { draw } from './draw';
 import { initMatrix } from './initMatrix';
+import { useSetInterval } from './useSetInterval';
+import { moveSnake } from './moveSnake';
+import { spawnApple } from './spawnApple';
 
-export { initMatrix, draw };
+export { initMatrix, useSetInterval, moveSnake, spawnApple };

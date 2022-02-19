@@ -9,11 +9,11 @@ import { runOnJS } from 'react-native-reanimated';
 import { MoveDirection } from '~application/models/Game';
 
 interface Props {
-  onTap: () => void;
+  onDoubleTap: () => void;
   onFling: (direction: MoveDirection) => void;
 }
 
-export const Controller: FC<Props> = ({ children, onTap, onFling }) => {
+export const Controller: FC<Props> = ({ children, onDoubleTap, onFling }) => {
   const flingRight = Gesture.Fling()
     .direction(Directions.RIGHT)
     .onEnd(() => {
@@ -42,7 +42,7 @@ export const Controller: FC<Props> = ({ children, onTap, onFling }) => {
     .numberOfTaps(2)
     .maxDuration(250)
     .onStart(() => {
-      runOnJS(onTap)();
+      runOnJS(onDoubleTap)();
     });
 
   const composedGestures = Gesture.Exclusive(

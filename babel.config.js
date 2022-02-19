@@ -22,6 +22,7 @@ module.exports = {
           '~components': './App/components',
           '~theme': './App/theme',
           '~application': './App/application',
+          '~assets': './App/assets',
         },
       },
     ],
