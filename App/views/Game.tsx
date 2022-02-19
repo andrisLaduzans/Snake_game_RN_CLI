@@ -50,7 +50,9 @@ export const Game = () => {
       return;
     }
 
-    setSnake(s => moveSnake(s));
+    const newSnake = moveSnake(snake, direction);
+
+    setSnake(newSnake);
   };
 
   const setPause = () => {
