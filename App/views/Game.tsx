@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
+import { useDevMode } from '~application/context';
 import {
+  eat,
   initMatrix,
   moveSnake,
   spawnApple,
@@ -38,6 +40,10 @@ const initialSnake: Point[] = [
 ];
 
 export const Game = () => {
+  const {
+    state: { isDevMode },
+  } = useDevMode();
+
   const [game, setGame] = useState<GameStatus>('paused');
 
   const [snake, setSnake] = useState<Point[]>(initialSnake);
@@ -66,8 +72,14 @@ export const Game = () => {
       return;
     }
 
-    const newSnake = moveSnake(snake, direction);
+    let newSnake = moveSnake(snake, direction);
     const isDead = isSnakeDead(newSnake, matrixSize);
+    const isAppleEaten = eat(newSnake, apple);
+    if (isAppleEaten) {
+      const newApple = spawnApple(matrixSize);
+      setApple(newApple);
+    }
+
     if (isDead) {
       endGame();
       return;
@@ -101,10 +113,13 @@ export const Game = () => {
           {direction ? <DirectionIndicator direction={direction} /> : null}
         </View>
 
-        <View style={[styles.section, styles.debugButtonContainer]}>
-          <Button title="move" onPress={tick} />
-          <Button title="reset-game" onPress={resetGame} />
-        </View>
+        {isDevMode ? (
+          <View style={[styles.section, styles.debugButtonContainer]}>
+            <Button title="move" onPress={tick} />
+
+            <Button title="reset-game" onPress={resetGame} />
+          </View>
+        ) : null}
       </Animated.View>
     </Controller>
   );
