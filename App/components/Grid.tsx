@@ -11,7 +11,7 @@ const { width } = Dimensions.get('window');
 interface Props {
   matrix: CellItem[][];
   snake: Point[];
-  apple: Point;
+  apple: Point | undefined;
 }
 
 export const Grid = ({ matrix, snake, apple }: Props) => {
@@ -28,17 +28,19 @@ export const Grid = ({ matrix, snake, apple }: Props) => {
           </View>
         ))}
 
-        <Cell
-          type="apple"
-          size={size.current}
-          style={[
-            styles.item,
-            {
-              left: size.current * apple.x,
-              top: size.current * apple.y,
-            },
-          ]}
-        />
+        {apple ? (
+          <Cell
+            type="apple"
+            size={size.current}
+            style={[
+              styles.item,
+              {
+                left: size.current * apple.x,
+                top: size.current * apple.y,
+              },
+            ]}
+          />
+        ) : null}
 
         {snake.map((snakeCell, index) => (
           <Cell

@@ -8,6 +8,7 @@ import {
   initMatrix,
   moveSnake,
   spawnApple,
+  useSetInterval,
   // useSetInterval,
 } from '~application/engine';
 import { grow } from '~application/engine/grow';
@@ -17,9 +18,9 @@ import { theme } from '~theme';
 
 import { Controller, DirectionIndicator, Grid } from '../components';
 
-// const initialGameSpeed = 900;
+const initialGameSpeed = 400;
 
-const matrixSize = 6;
+const matrixSize = 18;
 
 if (matrixSize % 2 !== 0) {
   throw new Error('matrix size has to be even number');
@@ -53,14 +54,16 @@ export const Game = () => {
 
   const [snake, setSnake] = useState<Point[]>(initialSnake);
 
-  const [apple, setApple] = useState<Point>(spawnApple(matrixSize));
+  const [apple, setApple] = useState<Point | undefined>(
+    spawnApple(snake, matrixSize),
+  );
 
   const [direction, setDirection] = useState<MoveDirection>();
 
   const resetGame = () => {
     setGame('paused');
     setSnake(initialSnake);
-    setApple(spawnApple(matrixSize));
+    setApple(spawnApple(initialSnake, matrixSize));
     setDirection(undefined);
   };
 
@@ -83,12 +86,14 @@ export const Game = () => {
       endGame();
       return;
     }
-    const isAppleEaten = eat(newSnake, apple);
-    if (isAppleEaten) {
-      const newApple = spawnApple(matrixSize);
-      setApple(newApple);
 
+    const isAppleEaten = eat(newSnake, apple);
+
+    if (isAppleEaten) {
       newSnake = grow(newSnake, snake);
+
+      const newApple = spawnApple(newSnake, matrixSize);
+      setApple(newApple);
     }
 
     setSnake(newSnake);
@@ -105,7 +110,7 @@ export const Game = () => {
     }
   };
 
-  // useSetInterval({ onTick: tick, duration: initialGameSpeed });
+  useSetInterval({ onTick: tick, duration: initialGameSpeed });
 
   return (
     <Controller
