@@ -26,8 +26,8 @@ export const moveSnake = (snake: Point[], direction: MoveDirection) => {
   if (!canGoDirection(newHead, snake)) {
     return snake;
   }
-
-  snake.pop();
-  const newSnake = [newHead, ...snake];
+  const copy = [...snake];
+  copy.pop();
+  const newSnake = [newHead, ...copy];
   return newSnake;
 };

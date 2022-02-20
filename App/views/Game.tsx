@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import {
@@ -8,6 +8,7 @@ import {
   spawnApple,
   // useSetInterval,
 } from '~application/engine';
+import { isSnakeDead } from '~application/engine/isSnakeDead';
 import { GameStatus, MoveDirection, Point } from '~application/models/Game';
 import { theme } from '~theme';
 
@@ -45,12 +46,32 @@ export const Game = () => {
 
   const [direction, setDirection] = useState<MoveDirection>();
 
+  const resetGame = () => {
+    setGame('paused');
+    setSnake(initialSnake);
+    setApple(spawnApple(matrixSize));
+    setDirection(undefined);
+  };
+
+  const endGame = () => {
+    setGame('paused');
+    setDirection(undefined);
+    Alert.alert('Game Over!', undefined, [
+      { text: 'Start again', onPress: resetGame },
+    ]);
+  };
+
   const tick = () => {
     if (!direction || game === 'paused') {
       return;
     }
 
     const newSnake = moveSnake(snake, direction);
+    const isDead = isSnakeDead(newSnake, matrixSize);
+    if (isDead) {
+      endGame();
+      return;
+    }
 
     setSnake(newSnake);
   };
@@ -61,13 +82,6 @@ export const Game = () => {
 
   const handleSetDirection = (input: MoveDirection) => {
     setDirection(input);
-  };
-
-  const resetGame = () => {
-    setGame('paused');
-    setSnake(initialSnake);
-    setApple(spawnApple(matrixSize));
-    setDirection(undefined);
   };
 
   // useSetInterval({ onTick: tick, duration: initialGameSpeed });
