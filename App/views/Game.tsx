@@ -19,11 +19,15 @@ import { Controller, DirectionIndicator, Grid } from '../components';
 
 // const initialGameSpeed = 900;
 
-const matrixSize = 5;
+const matrixSize = 6;
+
+if (matrixSize % 2 !== 0) {
+  throw new Error('matrix size has to be even number');
+}
 
 const initialHead: Point = {
-  x: Math.floor(matrixSize / 2),
-  y: Math.floor(matrixSize / 2),
+  x: Math.floor(matrixSize / 2) - 1,
+  y: Math.floor(matrixSize / 2) - 1,
 };
 
 const matrix = initMatrix(matrixSize);
@@ -96,6 +100,9 @@ export const Game = () => {
 
   const handleSetDirection = (input: MoveDirection) => {
     setDirection(input);
+    if (game === 'paused') {
+      setGame('running');
+    }
   };
 
   // useSetInterval({ onTick: tick, duration: initialGameSpeed });

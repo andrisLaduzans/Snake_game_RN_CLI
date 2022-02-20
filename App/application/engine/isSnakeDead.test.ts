@@ -53,4 +53,15 @@ describe('kill snake', () => {
     const isDead = isSnakeDead(newSnake, matrixSize);
     expect(isDead).toBe(true);
   });
+
+  it('snake should die if there are no more spaces left to grow or spawn an apple', () => {
+    const xSnake = [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+    ];
+    const isDead = isSnakeDead(xSnake, 2);
+    expect(isDead).toBe(true);
+  });
 });

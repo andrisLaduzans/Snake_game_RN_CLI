@@ -1,6 +1,10 @@
 import { Point } from '~application/models/Game';
 
 export const isSnakeDead = (snake: Point[], matrixSize: number) => {
+  if (snake.length === matrixSize * matrixSize) {
+    return true;
+  }
+
   const { x, y } = snake[0];
   if (x < 0 || x >= matrixSize || y < 0 || y >= matrixSize) {
     return true;
