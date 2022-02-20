@@ -10,6 +10,7 @@ import {
   spawnApple,
   // useSetInterval,
 } from '~application/engine';
+import { grow } from '~application/engine/grow';
 import { isSnakeDead } from '~application/engine/isSnakeDead';
 import { GameStatus, MoveDirection, Point } from '~application/models/Game';
 import { theme } from '~theme';
@@ -18,7 +19,7 @@ import { Controller, DirectionIndicator, Grid } from '../components';
 
 // const initialGameSpeed = 900;
 
-const matrixSize = 19;
+const matrixSize = 5;
 
 const initialHead: Point = {
   x: Math.floor(matrixSize / 2),
@@ -74,15 +75,16 @@ export const Game = () => {
 
     let newSnake = moveSnake(snake, direction);
     const isDead = isSnakeDead(newSnake, matrixSize);
+    if (isDead) {
+      endGame();
+      return;
+    }
     const isAppleEaten = eat(newSnake, apple);
     if (isAppleEaten) {
       const newApple = spawnApple(matrixSize);
       setApple(newApple);
-    }
 
-    if (isDead) {
-      endGame();
-      return;
+      newSnake = grow(newSnake, snake);
     }
 
     setSnake(newSnake);
