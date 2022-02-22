@@ -1,5 +1,11 @@
 import React, { useRef } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import {
+  Dimensions,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 
 import { CellItem, Point } from '~application/models/Game';
 import { theme } from '~theme';
@@ -12,13 +18,14 @@ interface Props {
   matrix: CellItem[][];
   snake: Point[];
   apple: Point | undefined;
+  style?: StyleProp<ViewStyle>;
 }
 
-export const Grid = ({ matrix, snake, apple }: Props) => {
+export const Grid = ({ matrix, snake, apple, style }: Props) => {
   const size = useRef((width - theme.outerPadding * 2) / matrix[0].length);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.gameBox}>
         {matrix.map(row => (
           <View key={`row-${row[0].id}`}>
@@ -63,7 +70,7 @@ export const Grid = ({ matrix, snake, apple }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: theme.outerPadding,
+    paddingHorizontal: theme.outerPadding,
   },
 
   gameBox: {

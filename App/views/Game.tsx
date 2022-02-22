@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useDevMode } from '~application/context';
 import {
+  declineDirection,
   eat,
   initMatrix,
   moveSnake,
@@ -16,7 +17,7 @@ import { isSnakeDead } from '~application/engine/isSnakeDead';
 import { GameStatus, MoveDirection, Point } from '~application/models/Game';
 import { theme } from '~theme';
 
-import { Controller, DirectionIndicator, Grid } from '../components';
+import { Controller, StatusIndicator, Grid } from '../components';
 
 const initialGameSpeed = 400;
 
@@ -58,18 +59,24 @@ export const Game = () => {
     spawnApple(snake, matrixSize),
   );
 
-  const [direction, setDirection] = useState<MoveDirection>();
+  const [direction, setDirection] = useState<MoveDirection>('UP');
+
+  const [declinedDirection, setDeclinedDirection] = useState<
+    MoveDirection | undefined
+  >();
 
   const resetGame = () => {
     setGame('paused');
     setSnake(initialSnake);
     setApple(spawnApple(initialSnake, matrixSize));
-    setDirection(undefined);
+    setDirection('UP');
+    setDeclinedDirection(undefined);
   };
 
   const endGame = () => {
     setGame('paused');
-    setDirection(undefined);
+    setDirection('UP');
+    setDeclinedDirection(undefined);
     Alert.alert('Game Over!', undefined, [
       { text: 'Start again', onPress: resetGame },
     ]);
@@ -81,6 +88,7 @@ export const Game = () => {
     }
 
     let newSnake = moveSnake(snake, direction);
+
     const isDead = isSnakeDead(newSnake, matrixSize);
     if (isDead) {
       endGame();
@@ -104,38 +112,53 @@ export const Game = () => {
   };
 
   const handleSetDirection = (input: MoveDirection) => {
-    setDirection(input);
     if (game === 'paused') {
-      setGame('running');
+      return;
     }
+
+    const isDeclined = declineDirection(input, snake);
+
+    if (isDeclined) {
+      setDeclinedDirection(input);
+      return;
+    }
+
+    setDeclinedDirection(undefined);
+    setDirection(input);
   };
 
-  useSetInterval({ onTick: tick, duration: initialGameSpeed });
+  useSetInterval({
+    onTick: tick,
+    duration: initialGameSpeed,
+    isDisabled: isDevMode,
+  });
 
   return (
-    <Controller
-      onDoubleTap={setPause}
-      onFling={input => handleSetDirection(input)}>
-      <Animated.View style={styles.container} collapsable={false}>
-        <View style={styles.section}>
-          <Text style={styles.heading}>Game: {game}</Text>
-        </View>
+    <Animated.View style={styles.container} collapsable={false}>
+      <StatusIndicator
+        direction={direction}
+        declinedDirection={declinedDirection}
+        paused={game === 'paused'}
+        style={styles.vSpacing}
+      />
 
-        <Grid matrix={matrix} snake={snake} apple={apple} />
+      <Grid
+        matrix={matrix}
+        snake={snake}
+        apple={apple}
+        style={styles.vSpacing}
+      />
 
-        <View style={styles.directionIndicatorContainer}>
-          {direction ? <DirectionIndicator direction={direction} /> : null}
-        </View>
-
-        {isDevMode ? (
-          <View style={[styles.section, styles.debugButtonContainer]}>
-            <Button title="move" onPress={tick} />
-
-            <Button title="reset-game" onPress={resetGame} />
-          </View>
-        ) : null}
-      </Animated.View>
-    </Controller>
+      <Controller
+        onDirection={handleSetDirection}
+        onPause={setPause}
+        style={styles.vSpacing}
+        isPaused={game === 'paused'}
+        isDevMode={isDevMode}
+        manualMove={tick}
+        resetGame={resetGame}
+      />
+    </Animated.View>
   );
 };
 
@@ -145,20 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  section: {
-    marginHorizontal: theme.outerPadding,
-  },
-
-  heading: {
-    color: theme.palette.text.onDark,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-
-  directionIndicatorContainer: {
-    alignItems: 'center',
-    minHeight: 40,
-  },
+  vSpacing: { marginTop: theme.outerPadding },
 
   debugButtonContainer: {
     backgroundColor: 'skyblue',

@@ -1,6 +1,13 @@
+const baseSpacing = 16;
+
 export const theme = {
-  outerPadding: 16,
-  spacing: {},
+  outerPadding: baseSpacing,
+  spacing: {
+    '0.25': baseSpacing * 0.25,
+    '0.5': baseSpacing * 0.5,
+    1: baseSpacing * 1,
+    '1.5': baseSpacing * 1.5,
+  },
 
   palette: {
     text: {
@@ -10,6 +17,10 @@ export const theme = {
 
     black: {
       def: '#212121',
+    },
+
+    blue: {
+      3: '#2196f3',
     },
 
     gray: {
@@ -34,6 +45,24 @@ export const theme = {
       2: '#4caf50',
       3: '#388e3c',
       4: '#1b5e20',
+    },
+  },
+
+  borderRadius: {
+    5: 5,
+  },
+
+  shadow: {
+    '12': {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 6,
+      },
+      shadowOpacity: 0.37,
+      shadowRadius: 7.49,
+
+      elevation: 12,
     },
   },
 };

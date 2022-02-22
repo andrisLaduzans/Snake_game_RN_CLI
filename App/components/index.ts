@@ -1,5 +1,5 @@
 import { Grid } from './Grid';
 import { Controller } from './Controller';
-import { DirectionIndicator } from './DirectionIndicator';
+import { StatusIndicator } from './StatusIndicator';
 
-export { Grid, Controller, DirectionIndicator };
+export { Grid, Controller, StatusIndicator };
