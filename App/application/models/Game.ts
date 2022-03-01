@@ -15,5 +15,11 @@ export type CellItem = {
 
 export type GameStatus = 'running' | 'paused';
 
+export type Game = {
+  status: GameStatus;
+  points: number;
+  speed: number;
+};
+
 export const moveDirections = ['UP', 'DOWN', 'LEFT', 'RIGHT'] as const;
 export type MoveDirection = typeof moveDirections[number];

@@ -1,4 +1,4 @@
 import { Lobby } from './Lobby';
-import { Game } from './Game';
+import { GameBoard } from './GameBoard';
 
-export { Lobby, Game };
+export { Lobby, GameBoard };

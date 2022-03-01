@@ -5,11 +5,11 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 
-import { Game, Lobby } from '../views';
+import { GameBoard, Lobby } from '../views';
 
 type RootStackParamList = {
   Lobby: undefined;
-  Game: undefined;
+  GameBoard: undefined;
 };
 
 export type RootStackNavProps<T extends keyof RootStackParamList> =
@@ -20,10 +20,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Game">
+      <Stack.Navigator initialRouteName="GameBoard">
         <Stack.Screen name="Lobby" component={Lobby} />
 
-        <Stack.Screen name="Game" component={Game} />
+        <Stack.Screen name="GameBoard" component={GameBoard} />
       </Stack.Navigator>
     </NavigationContainer>
   );

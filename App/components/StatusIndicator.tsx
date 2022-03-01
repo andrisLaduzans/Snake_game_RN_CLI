@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { MoveDirection } from '~application/models/Game';
@@ -13,6 +13,7 @@ interface Props {
   declinedDirection: MoveDirection | undefined;
   paused?: boolean;
   style?: StyleProp<ViewStyle>;
+  points: number;
 }
 
 export const StatusIndicator = ({
@@ -20,6 +21,7 @@ export const StatusIndicator = ({
   paused,
   style,
   declinedDirection,
+  points,
 }: Props) => {
   return (
     <View style={[styles.wrap, style]}>
@@ -61,7 +63,13 @@ export const StatusIndicator = ({
             </View>
           </View>
         ) : (
-          <View style={styles.spacer} />
+          <View style={styles.pointsContainer}>
+            <Text style={styles.pointsText}>Points:</Text>
+
+            <Text style={[styles.pointsText, styles.pointsCounter]}>
+              {points}
+            </Text>
+          </View>
         )}
       </View>
     </View>
@@ -107,6 +115,22 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  pointsContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+
+  pointsText: {
+    textAlign: 'right',
+    color: theme.palette.gray[0],
+    marginRight: theme.spacing['1'],
+  },
+
+  pointsCounter: {
+    color: theme.palette.gray[0],
+    fontSize: 18,
   },
 });
 

@@ -10,18 +10,21 @@ import {
   moveSnake,
   spawnApple,
   useSetInterval,
-  // useSetInterval,
 } from '~application/engine';
 import { grow } from '~application/engine/grow';
 import { isSnakeDead } from '~application/engine/isSnakeDead';
-import { GameStatus, MoveDirection, Point } from '~application/models/Game';
+import { Game, MoveDirection, Point } from '~application/models/Game';
 import { theme } from '~theme';
 
 import { Controller, StatusIndicator, Grid } from '../components';
 
-const initialGameSpeed = 400;
-
 const matrixSize = 18;
+
+const initialGame: Game = {
+  status: 'paused',
+  points: 0,
+  speed: 400,
+};
 
 if (matrixSize % 2 !== 0) {
   throw new Error('matrix size has to be even number');
@@ -46,12 +49,12 @@ const initialSnake: Point[] = [
   },
 ];
 
-export const Game = () => {
+export const GameBoard = () => {
   const {
     state: { isDevMode },
   } = useDevMode();
 
-  const [game, setGame] = useState<GameStatus>('paused');
+  const [game, setGame] = useState<Game>(initialGame);
 
   const [snake, setSnake] = useState<Point[]>(initialSnake);
 
@@ -66,7 +69,7 @@ export const Game = () => {
   >();
 
   const resetGame = () => {
-    setGame('paused');
+    setGame(initialGame);
     setSnake(initialSnake);
     setApple(spawnApple(initialSnake, matrixSize));
     setDirection('UP');
@@ -74,16 +77,14 @@ export const Game = () => {
   };
 
   const endGame = () => {
-    setGame('paused');
-    setDirection('UP');
-    setDeclinedDirection(undefined);
-    Alert.alert('Game Over!', undefined, [
+    setGame(g => ({ ...initialGame, points: g.points }));
+    Alert.alert('Game Over!', `You got ${game.points} points`, [
       { text: 'Start again', onPress: resetGame },
     ]);
   };
 
   const tick = () => {
-    if (!direction || game === 'paused') {
+    if (!direction || game.status === 'paused') {
       return;
     }
 
@@ -102,17 +103,25 @@ export const Game = () => {
 
       const newApple = spawnApple(newSnake, matrixSize);
       setApple(newApple);
+      setGame(g => ({
+        ...g,
+        speed: g.speed - 10 <= 50 ? 50 : g.speed - 10,
+        points: g.points + (initialGame.speed - (g.speed - 10)),
+      }));
     }
 
     setSnake(newSnake);
   };
 
   const setPause = () => {
-    setGame(g => (g === 'paused' ? 'running' : 'paused'));
+    setGame(g => ({
+      ...g,
+      status: g.status === 'paused' ? 'running' : 'paused',
+    }));
   };
 
   const handleSetDirection = (input: MoveDirection) => {
-    if (game === 'paused') {
+    if (game.status === 'paused') {
       return;
     }
 
@@ -129,7 +138,7 @@ export const Game = () => {
 
   useSetInterval({
     onTick: tick,
-    duration: initialGameSpeed,
+    duration: game.speed,
     isDisabled: isDevMode,
   });
 
@@ -138,8 +147,9 @@ export const Game = () => {
       <StatusIndicator
         direction={direction}
         declinedDirection={declinedDirection}
-        paused={game === 'paused'}
+        paused={game.status === 'paused'}
         style={styles.vSpacing}
+        points={game.points}
       />
 
       <Grid
@@ -153,7 +163,7 @@ export const Game = () => {
         onDirection={handleSetDirection}
         onPause={setPause}
         style={styles.vSpacing}
-        isPaused={game === 'paused'}
+        isPaused={game.status === 'paused'}
         isDevMode={isDevMode}
         manualMove={tick}
         resetGame={resetGame}
