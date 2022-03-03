@@ -23,7 +23,11 @@ export const Navigation = () => {
       <Stack.Navigator initialRouteName="GameBoard">
         <Stack.Screen name="Lobby" component={Lobby} />
 
-        <Stack.Screen name="GameBoard" component={GameBoard} />
+        <Stack.Screen
+          name="GameBoard"
+          component={GameBoard}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

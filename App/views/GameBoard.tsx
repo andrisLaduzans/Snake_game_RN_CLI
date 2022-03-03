@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useDevMode } from '~application/context';
@@ -144,20 +144,22 @@ export const GameBoard = () => {
 
   return (
     <Animated.View style={styles.container} collapsable={false}>
-      <StatusIndicator
-        direction={direction}
-        declinedDirection={declinedDirection}
-        paused={game.status === 'paused'}
-        style={styles.vSpacing}
-        points={game.points}
-      />
+      <View style={styles.top}>
+        <StatusIndicator
+          direction={direction}
+          declinedDirection={declinedDirection}
+          paused={game.status === 'paused'}
+          style={styles.vSpacing}
+          points={game.points}
+        />
 
-      <Grid
-        matrix={matrix}
-        snake={snake}
-        apple={apple}
-        style={styles.vSpacing}
-      />
+        <Grid
+          matrix={matrix}
+          snake={snake}
+          apple={apple}
+          style={styles.vSpacing}
+        />
+      </View>
 
       <Controller
         onDirection={handleSetDirection}
@@ -176,6 +178,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.palette.gray[4],
     flex: 1,
+    borderWidth: 2,
+  },
+
+  top: {
+    flex: 1.69,
+    justifyContent: 'flex-end',
   },
 
   vSpacing: { marginTop: theme.outerPadding },
